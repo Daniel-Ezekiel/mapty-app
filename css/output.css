@@ -44,7 +44,7 @@ html {
   -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
-  font-family: "Kumbh Sans", ui-sans-serif, system-ui;
+  font-family: "Manrope", ui-sans-serif, system-ui;
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
@@ -435,14 +435,13 @@ video {
 }
 
 :root {
-  --orange: 26deg 100% 55%;
-  --pale-orange: 25deg 100% 94%;
-  --very-dark-blue: 220deg 13% 13%;
-  --dark-grayish-blue: 219deg 9% 45%;
-  --grayish-blue: 220deg 14% 75%;
-  --light-grayish-blue: 223deg 64% 98%;
-  --white: 0deg 0% 100%;
-  --black-bg: 0deg 0% 0%;
+  --brand-orange: #ffb545;
+  --brand-green: #00c46a;
+  --dark-1: #2d3439;
+  --dark-2: #42484d;
+  --gray: #aaa;
+  --light-gray: #ececec;
+  --lighter-gray: 0deg 0% 100%;
 }
 
 *, ::before, ::after {
@@ -543,4 +542,48 @@ video {
   --tw-backdrop-opacity:  ;
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
+}
+
+.text-\[3rem\] {
+  font-size: 3rem;
+}
+
+.text-sm {
+  font-size: 1.2rem;
+}
+
+.text-base {
+  font-size: 1.5rem;
+}
+
+.text-xl {
+  font-size: 1.8rem;
+}
+
+.text-2xl {
+  font-size: 2rem;
+}
+
+.text-3xl {
+  font-size: 2.5rem;
+}
+
+.text-4xl {
+  font-size: 3rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }

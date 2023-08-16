@@ -4,13 +4,12 @@
 
 @layer base {
   :root {
-    --orange: 26deg 100% 55%;
-    --pale-orange: 25deg 100% 94%;
-    --very-dark-blue: 220deg 13% 13%;
-    --dark-grayish-blue: 219deg 9% 45%;
-    --grayish-blue: 220deg 14% 75%;
-    --light-grayish-blue: 223deg 64% 98%;
-    --white: 0deg 0% 100%;
-    --black-bg: 0deg 0% 0%;
+    --brand-orange: #ffb545;
+    --brand-green: #00c46a;
+    --dark-1: #2d3439;
+    --dark-2: #42484d;
+    --gray: #aaa;
+    --light-gray: #ececec;
+    --lighter-gray: 0deg 0% 100%;
   }
 }

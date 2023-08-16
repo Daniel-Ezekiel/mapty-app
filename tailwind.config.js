@@ -4,6 +4,16 @@ module.exports = {
   theme: {
     extend: {},
 
+    fontSize: {
+      sm: '1.2rem',
+      base: '1.5rem',
+      xl: '1.8rem',
+      '2xl': '2rem',
+      '3xl': '2.5rem',
+      '4xl': '3rem',
+      '5xl': '3.5rem',
+    },
+
     spacing: {
       1: '0.5rem',
       2: '1rem',
@@ -22,23 +32,20 @@ module.exports = {
       0: '0',
       2: '0.2rem',
       3: '0.3rem',
-      4: '0.4rem',
-      5: '0.5rem',
     },
 
     fontFamily: {
-      sans: ['"Kumbh Sans"', 'ui-sans-serif', 'system-ui'],
+      sans: ['"Manrope"', 'ui-sans-serif', 'system-ui'],
     },
 
     colors: {
-      orange: 'hsl(var(--orange))',
-      'pale-orange': 'hsl(var(--pale-orange))',
-      'very-dark-blue': 'hsl(var(--very-dark-blue))',
-      'dark-grayish-blue': 'hsl(var(--dark-grayish-blue))',
-      'grayish-blue': 'hsl(var(--grayish-blue))',
-      'light-grayish-blue': 'hsl(var(--light-grayish-blue))',
-      white: 'hsl(var(--white))',
-      'black-bg': 'hsl(var(--black-bg) / 0.75)',
+      orange: 'hsl(var(--brand-orange))',
+      green: 'hsl(var(--brand-green))',
+      'dark-1': 'hsl(var(--dark-1))',
+      'dark-2': 'hsl(var(--dark-2))',
+      gray: 'hsl(var(--gray))',
+      'light-gray': 'hsl(var(--light-gray))',
+      'lighter-gray': 'rgb(var(--lighter-gray))',
     },
 
     screens: {
