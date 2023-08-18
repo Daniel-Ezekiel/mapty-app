@@ -39,12 +39,12 @@ module.exports = {
     },
 
     colors: {
-      orange: 'hsl(var(--brand-orange))',
-      green: 'hsl(var(--brand-green))',
-      'dark-1': 'hsl(var(--dark-1))',
-      'dark-2': 'hsl(var(--dark-2))',
-      gray: 'hsl(var(--gray))',
-      'light-gray': 'hsl(var(--light-gray))',
+      orange: '#ffb545',
+      green: '#00c46a',
+      'dark-1': '#2d3439',
+      'dark-2': '#42484d',
+      gray: '#aaa',
+      'light-gray': '#ececec',
       'lighter-gray': 'rgb(var(--lighter-gray))',
     },
 
