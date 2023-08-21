@@ -4,8 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <link rel="shortcut icon" href="./images/icon.png" type="image/x-icon" />
     <link rel="stylesheet" href="./css/output.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
     <title>Mapty - Workout Tracker</title>
   </head>
   <body>
@@ -25,7 +32,7 @@
 
         <form
           action=""
-          class="m-auto grid gap-3 grid-cols-2 gap-3 bg-dark-2 p-5 px-3 rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center"
+          class="form hidden m-auto grid gap-3 grid-cols-2 gap-3 bg-dark-2 p-5 px-3 rounded-md xl:m-[0] transition-all duration-500 xl:max-w-[35rem] xl:self-center"
         >
           <div class="form-control flex gap-2 justify-between items-center">
             <label for="type">Type</label>
@@ -34,8 +41,8 @@
               id="workout-select"
               class="pr-2 rounded text-dark-2"
             >
-              <option value="Hiking">Hiking</option>
               <option value="Cycling">Cycling</option>
+              <option value="Running">Running</option>
             </select>
           </div>
 
@@ -46,7 +53,7 @@
               type="number"
               name="distance"
               placeholder="km"
-              class="w-full w-[8rem] pl-1 rounded text-dark-2"
+              class="workout-distance w-[8rem] pl-1 rounded text-dark-2"
             />
           </div>
 
@@ -57,47 +64,75 @@
               type="number"
               name="duration"
               placeholder="min"
-              class="w-full w-[8rem] pl-1 rounded text-dark-2"
+              class="workout-duration w-[8rem] pl-1 rounded text-dark-2"
             />
           </div>
 
           <div class="form-control flex gap-2 justify-between items-center">
             <label for="elevation">Elevation</label>
             <input
-              id="elevation"
+              id="elevation-cadence"
               type="number"
-              name="elev gain"
+              name="elevation"
               placeholder="km"
-              class="w-full w-[8rem] pl-1 rounded text-dark-2"
+              class="workout-goal w-[8rem] pl-1 rounded text-dark-2"
             />
           </div>
         </form>
 
-        <div
-          class="m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] border-green rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center"
+        <ul
+          class="workouts grid justify-center gap-3 max-h-[55rem] overflow-y-auto"
         >
-          <h2 class="col-span-full font-medium text-xl">
-            Running on August 17
-          </h2>
-          <span class="col-span-1 text-base uppercase">🚶‍♂️ 10 km</span>
-          <span class="col-span-1 text-base uppercase">⏱ 10 min</span>
-          <span class="col-span-1 text-base uppercase">⚡ 10 km/h</span>
-          <span class="col-span-1 text-base uppercase">🗻 10 spm</span>
-        </div>
-
-        <div
-          class="m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] border-orange rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center"
-        >
-          <h2 class="col-span-full font-medium text-xl">
-            Cycling on August 17
-          </h2>
-          <span class="col-span-1 text-base uppercase">🚴‍♂️ 10 km</span>
-          <span class="col-span-1 text-base uppercase">⏱ 10 min</span>
-          <span class="col-span-1 text-base uppercase">⚡ 10 km/h</span>
-          <span class="col-span-1 text-base uppercase">👣 10 spm</span>
-        </div>
+          <li
+            class="workout workout-running m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] border-green rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center"
+          >
+            <h2 class="workout-title col-span-full font-medium text-xl">
+              Running on August 17
+            </h2>
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >🚶‍♂️ 10 km</span
+            >
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >⏱ 10 min</span
+            >
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >⚡ 10 km/h</span
+            >
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >🗻 10 spm</span
+            >
+          </li>
+          <li
+            class="workout workout-cycling m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] border-orange rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center"
+          >
+            <h2 class="workout-title col-span-full font-medium text-xl">
+              Cycling on August 17
+            </h2>
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >🚴‍♂️ 10 km</span
+            >
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >⏱ 10 min</span
+            >
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >⚡ 10 km/h</span
+            >
+            <span class="workout-detail col-span-1 text-base uppercase"
+              >👣 10 spm</span
+            >
+          </li>
+        </ul>
       </section>
-      <section class="h-full bg-gray xl:col-span-4"></section>
+      <section class="map h-full bg-gray xl:col-span-4">
+        <div id="map" class="h-full w-full"></div>
+      </section>
     </main>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="text/javascript" src="js/script.js"></script>
   </body>
 </html>
