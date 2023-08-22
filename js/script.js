@@ -1,15 +1,75 @@
 'use strict';
 
+// Query Selectors
+const form = document.querySelector('form');
+const workoutSelect = document.querySelector('select');
+const inputDistance = document.querySelector('input.workout-distance');
+const inputDuration = document.querySelector('input.workout-duration');
+const inputGoal = document.querySelector('input.workout-goal');
+
 console.log(L);
 let userCurrCoords;
+const allWorkouts = [];
 var map;
 
-class Workout {}
+class Workout {
+  speed;
 
-class Cycling extends Workout {}
+  constructor(distance, duration) {
+    this.distance = distance;
+    this.duration = duration;
+  }
 
-class Running extends Workout {}
+  get speed() {
+    return this.distance / this.duration;
+  }
 
+  addWorkout(workout) {
+    allWorkouts.push(workout);
+  }
+}
+
+class Cycling extends Workout {
+  type = 'Cylcing';
+
+  constructor(distance, duration, steps) {
+    super(distance, duration);
+    this.steps = steps;
+  }
+
+  get stepsPerMin() {
+    return this.steps / this.duration;
+  }
+}
+
+class Running extends Workout {
+  type = 'Running';
+
+  constructor(distance, duration, elevation) {
+    super(distance, duration);
+    this.elevation = elevation;
+  }
+}
+// const running1 = new Running();
+// const cycling1 = new Running();
+
+// Function on map click
+const onMapClick = e => {
+  console.log(e);
+  const workoutEntry = {};
+  const lat = e.latlng.lat;
+  const lng = e.latlng.lng;
+  workoutEntry.coords = [lat, lng];
+
+  form.classList.remove('hidden');
+
+  // popup
+  //   .setLatLng(e.latlng)
+  //   .setContent('You clicked the map at ' + e.latlng.toString())
+  //   .openOn(map);
+};
+
+// Geolocation API setup
 const success = pos => {
   userCurrCoords = [pos.coords.latitude, pos.coords.longitude];
 
@@ -30,15 +90,6 @@ const success = pos => {
 
   // Popup creation and form rendering on click
   // var popup = L.popup();
-  function onMapClick(e) {
-    console.log(e);
-    form.classList.remove('hidden');
-
-    // popup
-    //   .setLatLng(e.latlng)
-    //   .setContent('You clicked the map at ' + e.latlng.toString())
-    //   .openOn(map);
-  }
   map.on('click', onMapClick);
 
   console.log(userCurrCoords);
@@ -54,15 +105,12 @@ const options = {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 // Update form labels and values depending on workout type
-const form = document.querySelector('form');
-const workoutSelect = document.querySelector('select');
-const workoutGoalInput = document.querySelector('input.workout-goal');
 workoutSelect.addEventListener('change', e => {
   if (e.target.value.toLowerCase() == 'running') {
-    workoutGoalInput.setAttribute('name', 'cadence');
-    workoutGoalInput.setAttribute('placeholder', 'step/min');
+    inputGoal.setAttribute('name', 'cadence');
+    inputGoal.setAttribute('placeholder', 'steps');
   } else {
-    workoutGoalInput.setAttribute('name', 'elevation');
-    workoutGoalInput.setAttribute('placeholder', 'km');
+    inputGoal.setAttribute('name', 'elevation');
+    inputGoal.setAttribute('placeholder', 'km');
   }
 });
