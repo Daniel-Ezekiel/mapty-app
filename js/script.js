@@ -10,9 +10,9 @@ const labelGoal = document.querySelector('label[for="elevation-cadence"]');
 const workoutsUl = document.querySelector('.workouts');
 
 console.log(L);
-const allWorkouts = JSON.parse(localStorage.getItem('allWorkouts')) || [];
+// const allWorkouts = JSON.parse(localStorage.getItem('allWorkouts')) || [];
 const workoutEntry = {};
-// var map;
+var map;
 
 // Function on map click
 const onMapClick = e => {
@@ -33,7 +33,7 @@ const success = pos => {
   const userCoords = [pos.coords.latitude, pos.coords.longitude];
 
   // OpenStreetMap
-  const map = L.map('map').setView(userCoords, 13);
+  map = L.map('map').setView(userCoords, 13);
 
   // Tile layer
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -42,7 +42,8 @@ const success = pos => {
   }).addTo(map);
 
   // Markers
-  // var marker = L.marker(userCurrCoords).addTo(map);
+  // var marker = L.marker(userCoords).addTo(map);
+  workoutTracker.showMarkerAndPopup();
 
   // Popup
   // marker.bindPopup('<b>Hello world!</b><br>I am a popup.').openPopup();
@@ -64,7 +65,24 @@ const options = {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 class WorkoutTracker {
-  #allWorkouts = [];
+  #allWorkouts = [
+    {
+      date: '8/23/2023',
+      coords: [7.471070500327129, 4.5714904179784375],
+      distance: 3,
+      duration: 15,
+      type: 'Cycling',
+      elevation: 1,
+    },
+    {
+      date: '8/23/2023',
+      coords: [7.469879070131089, 4.533538857306657],
+      distance: 4,
+      duration: 33,
+      type: 'Running',
+      steps: 6656,
+    },
+  ];
 
   addWorkout(workout) {
     this.#allWorkouts.push(workout);
@@ -78,7 +96,7 @@ class WorkoutTracker {
         ${type} on ${date}
       </h2>
       <span class="workout-detail col-span-1 text-base uppercase"
-        >${type == 'Running' ? '🏃' : '🚴‍♂️'} ${distance} km
+        >${type == 'Running' ? '🏃‍♀️' : '🚴‍♂️'} ${distance} km
       </span>
       <span class="workout-detail col-span-1 text-base uppercase"
         >⏱ ${duration} min
@@ -96,12 +114,27 @@ class WorkoutTracker {
     workoutsUl.insertAdjacentHTML('afterbegin', workoutLi);
   }
 
+  showMarkerAndPopup() {
+    this.#allWorkouts.forEach(({ coords, type, date }) => {
+      let marker = L.marker(coords).addTo(map);
+      let popup = L.popup(coords, {
+        content: `${
+          type == 'Running' ? `🏃‍♀️ Running on ${date}` : `🚴‍♂️ Cycling on ${date}`
+        }`,
+      });
+      popup.className = `font-bold`;
+      marker.bindPopup(popup).openPopup();
+    });
+  }
+
   showWorkouts() {
     workoutsUl.textContent = '';
     console.log(this.#allWorkouts);
     this.#allWorkouts.forEach(workout => {
       this.createWorkout(workout);
     });
+
+    return this;
   }
 }
 const workoutTracker = new WorkoutTracker();
@@ -183,7 +216,7 @@ class Cycling extends Workout {
 //     createWorkout(workout);
 //   });
 // };
-workoutTracker.showWorkouts(allWorkouts);
+workoutTracker.showWorkouts();
 
 // Update form labels and values depending on workout type
 workoutSelect.addEventListener('change', e => {
@@ -216,7 +249,7 @@ const populateWorkoutEntry = e => {
   form.querySelectorAll('input').forEach(input => (input.value = ''));
 
   // localStorage.setItem('allWorkouts', JSON.stringify(allWorkouts));
-  workoutTracker.showWorkouts();
+  workoutTracker.showWorkouts().showMarkerAndPopup();
 };
 form.addEventListener('keypress', e => {
   e.key === 'Enter' &&
