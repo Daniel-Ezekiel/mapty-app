@@ -590,6 +590,10 @@ video {
   max-height: 30rem;
 }
 
+.min-h-\[50rem\] {
+  min-height: 50rem;
+}
+
 .w-\[13rem\] {
   width: 13rem;
 }
