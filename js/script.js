@@ -6,22 +6,25 @@ const workoutSelect = document.querySelector('select');
 const inputDistance = document.querySelector('input.workout-distance');
 const inputDuration = document.querySelector('input.workout-duration');
 const inputGoal = document.querySelector('input.workout-goal');
+const workoutsUl = document.querySelector('.workouts');
 
 console.log(L);
 let userCurrCoords;
-const allWorkouts = [];
-var map;
+const allWorkouts = JSON.parse(localStorage.getItem('allWorkouts')) || [];
+const workoutEntry = {};
+// var map;
 
 class Workout {
-  speed;
+  date = new Date().toLocaleDateString();
 
-  constructor(distance, duration) {
+  constructor(coords, distance, duration) {
+    this.coords = coords;
     this.distance = distance;
     this.duration = duration;
   }
 
   get speed() {
-    return this.distance / this.duration;
+    return this.distance / (this.duration / 60);
   }
 
   addWorkout(workout) {
@@ -29,34 +32,81 @@ class Workout {
   }
 }
 
-class Cycling extends Workout {
-  type = 'Cylcing';
+class Running extends Workout {
+  type = 'Running';
 
-  constructor(distance, duration, steps) {
-    super(distance, duration);
+  constructor(coords, distance, duration, steps) {
+    super(coords, distance, duration);
     this.steps = steps;
   }
 
   get stepsPerMin() {
-    return this.steps / this.duration;
+    return Math.floor(this.steps / this.duration);
   }
 }
 
-class Running extends Workout {
-  type = 'Running';
+class Cycling extends Workout {
+  type = 'Cycling';
 
-  constructor(distance, duration, elevation) {
-    super(distance, duration);
+  constructor(coords, distance, duration, elevation) {
+    super(coords, distance, duration);
     this.elevation = elevation;
   }
 }
-// const running1 = new Running();
-// const cycling1 = new Running();
+
+// Create and show workouts on page load
+const createWorkout = ({
+  type,
+  date,
+  distance,
+  duration,
+  steps,
+  stepsPerMin,
+}) => {
+  const workoutLi = `<li  class="workout workout-${type.toLowerCase()} m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] ${
+    type == 'Running' ? 'border-green' : 'border-orange'
+  } rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center">
+    <h2 class="workout-title col-span-full font-medium text-xl">
+      ${type} on ${date}
+    </h2>
+    <span class="workout-detail col-span-1 text-base uppercase"
+      >${type == 'Running' ? '🏃' : '🚴‍♂️'} ${distance} km
+    </span>
+    <span class="workout-detail col-span-1 text-base uppercase"
+      >⏱ ${duration} min
+    </span>
+    <span class="workout-detail col-span-1 text-base uppercase"
+      >⚡ ${Math.floor(distance / (duration / 60))} km/h
+    </span>
+    <span class="workout-detail col-span-1 text-base uppercase"
+      >${type == 'Running' ? '👣' : '🗻'} 10 ${type == 'Running' ? 'spm' : 'km'}
+    </span>
+  </li>`;
+
+  workoutsUl.insertAdjacentHTML('afterbegin', workoutLi);
+};
+const showWorkouts = allWorkouts => {
+  workoutsUl.textContent = '';
+  allWorkouts.forEach(workout => {
+    createWorkout(workout);
+  });
+};
+showWorkouts(allWorkouts);
+
+// Update form labels and values depending on workout type
+workoutSelect.addEventListener('change', e => {
+  if (e.target.value.toLowerCase() == 'running') {
+    inputGoal.setAttribute('name', 'cadence');
+    inputGoal.setAttribute('placeholder', 'steps');
+  } else {
+    inputGoal.setAttribute('name', 'elevation');
+    inputGoal.setAttribute('placeholder', 'km');
+  }
+});
 
 // Function on map click
 const onMapClick = e => {
   console.log(e);
-  const workoutEntry = {};
   const lat = e.latlng.lat;
   const lng = e.latlng.lng;
   workoutEntry.coords = [lat, lng];
@@ -69,12 +119,42 @@ const onMapClick = e => {
   //   .openOn(map);
 };
 
+// On form filled
+const populateWorkoutEntry = e => {
+  e.preventDefault();
+
+  workoutEntry.distance = Number(inputDistance.value);
+  workoutEntry.duration = Number(inputDuration.value);
+  workoutEntry.goal = Number(inputGoal.value);
+
+  const workout =
+    workoutSelect.value === 'Running'
+      ? new Running(...Object.values(workoutEntry))
+      : new Cycling(...Object.values(workoutEntry));
+
+  allWorkouts.push(workout);
+
+  form.classList.add('hidden');
+  form.querySelectorAll('input').forEach(input => (input.value = ''));
+
+  localStorage.setItem('allWorkouts', JSON.stringify(allWorkouts));
+  showWorkouts(allWorkouts);
+  console.log('Form filled!');
+};
+form.addEventListener('keypress', e => {
+  e.key === 'Enter' &&
+    inputDistance.value &&
+    inputDuration.value &&
+    inputGoal.value &&
+    populateWorkoutEntry(e);
+});
+
 // Geolocation API setup
 const success = pos => {
   userCurrCoords = [pos.coords.latitude, pos.coords.longitude];
 
   // OpenStreetMap
-  map = L.map('map').setView(userCurrCoords, 13);
+  const map = L.map('map').setView(userCurrCoords, 13);
 
   // Tile layer
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -103,14 +183,3 @@ const options = {
   maximumAge: 0,
 };
 navigator.geolocation.getCurrentPosition(success, error, options);
-
-// Update form labels and values depending on workout type
-workoutSelect.addEventListener('change', e => {
-  if (e.target.value.toLowerCase() == 'running') {
-    inputGoal.setAttribute('name', 'cadence');
-    inputGoal.setAttribute('placeholder', 'steps');
-  } else {
-    inputGoal.setAttribute('name', 'elevation');
-    inputGoal.setAttribute('placeholder', 'km');
-  }
-});

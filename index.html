@@ -40,6 +40,7 @@
               name="type"
               id="workout-select"
               class="pr-2 rounded text-dark-2"
+              required
             >
               <option value="Cycling">Cycling</option>
               <option value="Running">Running</option>
@@ -53,6 +54,7 @@
               type="number"
               name="distance"
               placeholder="km"
+              required
               class="workout-distance w-[8rem] pl-1 rounded text-dark-2"
             />
           </div>
@@ -64,6 +66,7 @@
               type="number"
               name="duration"
               placeholder="min"
+              required
               class="workout-duration w-[8rem] pl-1 rounded text-dark-2"
             />
           </div>
@@ -75,6 +78,7 @@
               type="number"
               name="elevation"
               placeholder="km"
+              required
               class="workout-goal w-[8rem] pl-1 rounded text-dark-2"
             />
           </div>
@@ -83,7 +87,7 @@
         <ul
           class="workouts grid justify-center gap-3 max-h-[55rem] overflow-y-auto"
         >
-          <li
+          <!-- <li
             class="workout workout-running m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] border-green rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center"
           >
             <h2 class="workout-title col-span-full font-medium text-xl">
@@ -120,7 +124,7 @@
             <span class="workout-detail col-span-1 text-base uppercase"
               >👣 10 spm</span
             >
-          </li>
+          </li> -->
         </ul>
       </section>
       <section class="map h-full bg-gray xl:col-span-4">
