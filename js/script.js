@@ -65,33 +65,16 @@ const options = {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 class WorkoutTracker {
-  #allWorkouts = [
-    {
-      date: '8/23/2023',
-      coords: [7.471070500327129, 4.5714904179784375],
-      distance: 3,
-      duration: 15,
-      type: 'Cycling',
-      elevation: 1,
-    },
-    {
-      date: '8/23/2023',
-      coords: [7.469879070131089, 4.533538857306657],
-      distance: 4,
-      duration: 33,
-      type: 'Running',
-      steps: 6656,
-    },
-  ];
+  #allWorkouts = JSON.parse(localStorage.getItem('allWorkouts')) || [];
 
   addWorkout(workout) {
     this.#allWorkouts.push(workout);
   }
 
-  createWorkout({ type, date, distance, duration, steps, stepsPerMin }) {
-    const workoutLi = `<li  class="workout workout-${type.toLowerCase()} m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] ${
+  createWorkout({ coords, type, date, distance, duration, steps, elevation }) {
+    const workoutLi = `<li class="workout workout-${type.toLowerCase()} m-auto grid grid-cols-4 gap-2 bg-dark-2 p-4 border-l-[0.5rem] ${
       type == 'Running' ? 'border-green' : 'border-orange'
-    } rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center">
+    } rounded-md xl:m-[0] xl:max-w-[41rem] xl:self-center cursor-pointer">
       <h2 class="workout-title col-span-full font-medium text-xl">
         ${type} on ${date}
       </h2>
@@ -105,24 +88,30 @@ class WorkoutTracker {
         >⚡ ${Math.floor(distance / (duration / 60))} km/h
       </span>
       <span class="workout-detail col-span-1 text-base uppercase"
-        >${type == 'Running' ? '👣' : '🗻'} 10 ${
-      type == 'Running' ? 'spm' : 'km'
-    }
+        >${
+          type == 'Running'
+            ? `👣 ${Math.floor(steps / duration)} spm`
+            : `🗻 ${elevation} km`
+        }
       </span>
     </li>`;
 
     workoutsUl.insertAdjacentHTML('afterbegin', workoutLi);
+    workoutsUl.querySelector('li').addEventListener('click', () => {
+      map.setView(coords, 17);
+      console.log(this);
+    });
   }
 
   showMarkerAndPopup() {
     this.#allWorkouts.forEach(({ coords, type, date }) => {
       let marker = L.marker(coords).addTo(map);
       let popup = L.popup(coords, {
+        className: `bg-dark-2 text-[1.65rem]`,
         content: `${
           type == 'Running' ? `🏃‍♀️ Running on ${date}` : `🚴‍♂️ Cycling on ${date}`
         }`,
       });
-      popup.className = `font-bold`;
       marker.bindPopup(popup).openPopup();
     });
   }
@@ -134,6 +123,7 @@ class WorkoutTracker {
       this.createWorkout(workout);
     });
 
+    localStorage.setItem('allWorkouts', JSON.stringify(this.#allWorkouts));
     return this;
   }
 }
