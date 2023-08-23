@@ -570,60 +570,24 @@ video {
   height: 5.4rem;
 }
 
+.h-\[60rem\] {
+  height: 60rem;
+}
+
 .h-full {
   height: 100%;
 }
 
-.max-h-full {
-  max-height: 100%;
-}
-
-.max-h-\[70rem\] {
-  max-height: 70rem;
-}
-
-.max-h-\[60rem\] {
-  max-height: 60rem;
-}
-
-.max-h-\[50rem\] {
-  max-height: 50rem;
+.h-\[50rem\] {
+  height: 50rem;
 }
 
 .max-h-\[55rem\] {
   max-height: 55rem;
 }
 
-.max-h-\[58rem\] {
-  max-height: 58rem;
-}
-
-.max-h-\[80\%\] {
-  max-height: 80%;
-}
-
-.max-h-\[70\%\] {
-  max-height: 70%;
-}
-
-.max-h-\[65\%\] {
-  max-height: 65%;
-}
-
-.max-h-\[60\%\] {
-  max-height: 60%;
-}
-
-.max-h-\[50\%\] {
-  max-height: 50%;
-}
-
-.max-h-\[55\%\] {
-  max-height: 55%;
-}
-
-.max-h-\[58\%\] {
-  max-height: 58%;
+.max-h-\[30rem\] {
+  max-height: 30rem;
 }
 
 .w-\[13rem\] {
@@ -678,20 +642,8 @@ video {
   gap: 2.5rem;
 }
 
-.overflow-scroll {
-  overflow: scroll;
-}
-
 .overflow-y-auto {
   overflow-y: auto;
-}
-
-.overflow-y-hidden {
-  overflow-y: hidden;
-}
-
-.overflow-y-scroll {
-  overflow-y: scroll;
 }
 
 .rounded {
@@ -786,14 +738,6 @@ video {
   color: rgb(var(--lighter-gray));
 }
 
-.transition {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -802,10 +746,6 @@ video {
 
 .duration-500 {
   transition-duration: 500ms;
-}
-
-.ease-in-out {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (min-width: 1280px) {
@@ -819,6 +759,10 @@ video {
 
   .xl\:m-\[0\] {
     margin: 0;
+  }
+
+  .xl\:max-h-\[55rem\] {
+    max-height: 55rem;
   }
 
   .xl\:max-w-\[35rem\] {
