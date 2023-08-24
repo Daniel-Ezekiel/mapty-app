@@ -98,8 +98,7 @@ class WorkoutTracker {
 
     workoutsUl.insertAdjacentHTML('afterbegin', workoutLi);
     workoutsUl.querySelector('li').addEventListener('click', () => {
-      map.setView(coords, 17);
-      console.log(this);
+      map.setView(coords, 18);
     });
   }
 
@@ -107,7 +106,7 @@ class WorkoutTracker {
     this.#allWorkouts.forEach(({ coords, type, date }) => {
       let marker = L.marker(coords).addTo(map);
       let popup = L.popup(coords, {
-        className: `bg-dark-2 text-[1.65rem]`,
+        className: `bg-dark-2 text-[1.4rem]`,
         content: `${
           type == 'Running' ? `🏃‍♀️ Running on ${date}` : `🚴‍♂️ Cycling on ${date}`
         }`,
