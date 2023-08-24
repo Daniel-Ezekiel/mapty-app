@@ -8,3 +8,32 @@ html {
   margin: 0;
   box-sizing: border-box;
 }
+
+.workout-popup {
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  font-family: 'Manrope', sans-serif;
+}
+
+.workout-popup.running {
+  border-left: solid 0.5rem #00c46a;
+}
+
+.workout-popup.cycling {
+  border-left: solid 0.5rem #ffb545;
+}
+
+.workout-popup .leaflet-popup-content-wrapper {
+  border-radius: 0;
+  background-color: #2d3439;
+}
+
+.workout-popup .leaflet-popup-content {
+  border-radius: 0;
+  color: #fff;
+}
+
+.workout-popup .leaflet-popup-tip {
+  background-color: transparent;
+}
