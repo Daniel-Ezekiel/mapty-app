@@ -9,12 +9,11 @@ const inputGoal = document.querySelector('input.workout-goal');
 const labelGoal = document.querySelector('label[for="elevation-cadence"]');
 const workoutsUl = document.querySelector('.workouts');
 
-// let mapEvent;
 class WorkoutTracker {
   #allWorkouts = JSON.parse(localStorage.getItem('allWorkouts')) || [];
   userCoords;
-  map;
-  mapEvent;
+  #map;
+  #mapEvent;
   workoutEntry = {};
 
   constructor() {
@@ -41,20 +40,20 @@ class WorkoutTracker {
 
   // Show map based on user position
   displayMap() {
-    this.map = L.map('map').setView(this.userCoords, 13);
+    this.#map = L.map('map').setView(this.userCoords, 13);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap',
-    }).addTo(this.map);
+    }).addTo(this.#map);
 
     this.showMarkerAndPopup();
-    this.map.on('click', this.displayForm.bind(this));
+    this.#map.on('click', this.displayForm.bind(this));
   }
 
   // Show form for filling
   displayForm(mapEv) {
-    this.mapEvent = mapEv;
-    const { lat, lng } = this.mapEvent.latlng;
+    this.#mapEvent = mapEv;
+    const { lat, lng } = this.#mapEvent.latlng;
 
     form.classList.remove('hidden');
     inputDistance.focus();
@@ -114,7 +113,7 @@ class WorkoutTracker {
 
     workoutsUl.insertAdjacentHTML('afterbegin', workoutLi);
     workoutsUl.querySelector('li').addEventListener('click', () => {
-      this.map.setView(coords, 18);
+      this.#map.setView(coords, 18);
     });
   }
 
@@ -132,7 +131,7 @@ class WorkoutTracker {
   // Display markers and popups for workouts
   showMarkerAndPopup() {
     this.#allWorkouts.forEach(({ coords, type, date }) => {
-      let marker = L.marker(coords).addTo(this.map);
+      let marker = L.marker(coords).addTo(this.#map);
       let popup = L.popup(coords, {
         content: `${
           type == 'Running' ? `🏃‍♀️ ${type} on ${date}` : `🚴‍♂️ ${type} on ${date}`
@@ -167,13 +166,17 @@ class WorkoutTracker {
       inputGoal.value &&
       this.populateWorkoutEntry(e);
   }
+
+  getMapEvent() {
+    return this.#mapEvent;
+  }
 }
 
 class Workout {
   date = new Date().toLocaleDateString();
   coords = [
-    workoutTracker.mapEvent.latlng.lat,
-    workoutTracker.mapEvent.latlng.lng,
+    workoutTracker.getMapEvent().latlng.lat,
+    workoutTracker.getMapEvent().latlng.lng,
   ];
 
   constructor(distance, duration) {
