@@ -20,7 +20,6 @@ class WorkoutTracker {
     this.getPosition();
     this.showWorkouts();
 
-    // Update form labels and values depending on workout type
     workoutSelect.addEventListener('change', this.updateFormFields.bind(this));
     form.addEventListener('keypress', this.setupWorkout.bind(this));
   }
@@ -77,7 +76,7 @@ class WorkoutTracker {
     form.querySelectorAll('input').forEach(input => (input.value = ''));
 
     // localStorage.setItem('allWorkouts', JSON.stringify(allWorkouts));
-    workoutTracker.showWorkouts().showMarkerAndPopup();
+    this.showWorkouts().showMarkerAndPopup();
   }
 
   // Add workouts to allWorkouts
