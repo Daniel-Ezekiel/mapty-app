@@ -9,12 +9,22 @@ const inputGoal = document.querySelector('input.workout-goal');
 const labelGoal = document.querySelector('label[for="elevation-cadence"]');
 const workoutsUl = document.querySelector('.workouts');
 
-let map, mapEvent;
+// let mapEvent;
 class WorkoutTracker {
   #allWorkouts = JSON.parse(localStorage.getItem('allWorkouts')) || [];
   userCoords;
   map;
+  mapEvent;
   workoutEntry = {};
+
+  constructor() {
+    this.getPosition();
+    this.showWorkouts();
+
+    // Update form labels and values depending on workout type
+    workoutSelect.addEventListener('change', this.updateFormFields.bind(this));
+    form.addEventListener('keypress', this.setupWorkout.bind(this));
+  }
 
   // Get user location
   getPosition() {
@@ -38,13 +48,13 @@ class WorkoutTracker {
     }).addTo(this.map);
 
     this.showMarkerAndPopup();
-    this.map.on('click', this.displayForm);
+    this.map.on('click', this.displayForm.bind(this));
   }
 
   // Show form for filling
   displayForm(mapEv) {
-    mapEvent = mapEv;
-    const { lat, lng } = mapEvent.latlng;
+    this.mapEvent = mapEv;
+    const { lat, lng } = this.mapEvent.latlng;
 
     form.classList.remove('hidden');
     inputDistance.focus();
@@ -137,11 +147,34 @@ class WorkoutTracker {
       marker.bindPopup(popup).openPopup();
     });
   }
+
+  updateFormFields(e) {
+    if (e.target.value.toLowerCase() == 'running') {
+      labelGoal.textContent = 'Steps';
+      inputGoal.setAttribute('name', 'cadence');
+      inputGoal.setAttribute('placeholder', 'steps');
+    } else {
+      labelGoal.textContent = 'Elevation';
+      inputGoal.setAttribute('name', 'elevation');
+      inputGoal.setAttribute('placeholder', 'km');
+    }
+  }
+
+  setupWorkout(e) {
+    e.key === 'Enter' &&
+      inputDistance.value &&
+      inputDuration.value &&
+      inputGoal.value &&
+      this.populateWorkoutEntry(e);
+  }
 }
 
 class Workout {
   date = new Date().toLocaleDateString();
-  coords = [mapEvent.latlng.lat, mapEvent.latlng.lng];
+  coords = [
+    workoutTracker.mapEvent.latlng.lat,
+    workoutTracker.mapEvent.latlng.lng,
+  ];
 
   constructor(distance, duration) {
     this.distance = distance;
@@ -180,25 +213,3 @@ class Cycling extends Workout {
 }
 
 const workoutTracker = new WorkoutTracker();
-workoutTracker.getPosition();
-workoutTracker.showWorkouts();
-
-// Update form labels and values depending on workout type
-workoutSelect.addEventListener('change', e => {
-  if (e.target.value.toLowerCase() == 'running') {
-    labelGoal.textContent = 'Steps';
-    inputGoal.setAttribute('name', 'cadence');
-    inputGoal.setAttribute('placeholder', 'steps');
-  } else {
-    labelGoal.textContent = 'Elevation';
-    inputGoal.setAttribute('name', 'elevation');
-    inputGoal.setAttribute('placeholder', 'km');
-  }
-});
-form.addEventListener('keypress', e => {
-  e.key === 'Enter' &&
-    inputDistance.value &&
-    inputDuration.value &&
-    inputGoal.value &&
-    workoutTracker.populateWorkoutEntry(e);
-});
